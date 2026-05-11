@@ -58,18 +58,20 @@ Este projeto atende às principais exigências propostas na atividade, incluindo
 
 ## Estrutura do Projeto
 
+O projeto foi mantido simples, com os principais componentes separados em poucos arquivos:
+
 ```
-├── MainActivity.kt     // Tela de login
-├── HomeActivity.kt     // Tela do catálogo/lista
-├── screens/
-│   ├── LoginScreen.kt  // Composable da tela de login
-│   └── HomeScreen.kt   // Composable da tela principal
-├── components/
-│   └── AnimeCard.kt    // Composable reutilizável do card de anime
-├── data/
-│   └── Animes.kt       // Modelo Anime e lista de dados
-└── ui/
-    └── theme/          // Tema e estilos do app
+app/src/main/java/com/jorge/anicatalog/
+├── MainActivity.kt      // Activity que exibe a tela de login
+├── LoginScreen.kt       // Composable da tela de login
+├── HomeActivity.kt      // Activity da tela principal (catálogo)
+├── HomeScreen.kt        // Composable da tela principal + AnimeCard
+└── Anime.kt             // data class Anime + lista estática (animes)
+```
+
+Tema do app:
+```
+app/src/main/java/com/jorge/anicatalog/ui/theme/
 ```
 
 ---
