@@ -13,8 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AniCatalog">
 
-        <activity android:name=".HomeActivity" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true">

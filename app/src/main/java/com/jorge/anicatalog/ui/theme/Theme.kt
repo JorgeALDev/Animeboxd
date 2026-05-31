@@ -1,27 +1,27 @@
 package com.jorge.anicatalog.ui.theme
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 
-private val PaperColorScheme = lightColorScheme(
-    primary          = InkBlack,
-    onPrimary        = PaperCream,
-    background       = PaperCream,
-    onBackground     = InkBlack,
-    surface          = PaperLight,
-    onSurface        = InkBlack,
-    surfaceVariant   = PaperMid,
-    onSurfaceVariant = InkMid,
-    outline          = PaperBorder,
-    outlineVariant   = InkFaint
+private val NoirColorScheme = darkColorScheme(
+    primary          = White,
+    onPrimary        = Black,
+    background       = OledBlack,
+    onBackground     = TextPrimary,
+    surface          = SurfaceCard,
+    onSurface        = TextPrimary,
+    surfaceVariant   = SurfaceHigh,
+    onSurfaceVariant = TextSecondary,
+    outline          = SurfaceBorder,
+    outlineVariant   = TextDim
 )
 
 @Composable
 fun AniCatalogTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = PaperColorScheme,
-        typography  = PaperTypography,
+        colorScheme = NoirColorScheme,
+        typography  = NoirTypography,
         content     = content
     )
 }

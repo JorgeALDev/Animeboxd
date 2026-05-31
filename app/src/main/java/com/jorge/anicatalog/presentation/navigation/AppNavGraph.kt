@@ -8,7 +8,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.jorge.anicatalog.data.local.AniCatalogDatabase
 import com.jorge.anicatalog.data.repository.AnimeRepository
-import com.jorge.anicatalog.presentation.detail.DetailScreen
 import com.jorge.anicatalog.presentation.ViewModelFactory
 import com.jorge.anicatalog.presentation.catalog.CatalogScreen
 import com.jorge.anicatalog.presentation.catalog.CatalogViewModel
@@ -17,10 +16,9 @@ import com.jorge.anicatalog.presentation.mylist.MyListScreen
 import com.jorge.anicatalog.presentation.mylist.MyListViewModel
 
 sealed class Screen(val route: String) {
-    object Home : Screen("home")
+    object Home    : Screen("home")
     object Catalog : Screen("catalog")
-    object MyList : Screen("mylist")
-    object Detail : Screen("detail/{animeId}")
+    object MyList  : Screen("mylist")
 }
 
 @Composable
@@ -37,7 +35,7 @@ fun AppNavGraph(navController: NavHostController) {
             HomeScreen(
                 viewModel = viewModel,
                 onNavigateToCatalog = { navController.navigate(Screen.Catalog.route) },
-                onNavigateToMyList = { navController.navigate(Screen.MyList.route) }
+                onNavigateToMyList  = { navController.navigate(Screen.MyList.route) }
             )
         }
 
@@ -45,7 +43,6 @@ fun AppNavGraph(navController: NavHostController) {
             val viewModel: CatalogViewModel = viewModel(factory = factory)
             CatalogScreen(
                 viewModel = viewModel,
-                onNavigateToMyList = { navController.navigate(Screen.MyList.route) },
                 onNavigateBack = { navController.popBackStack() }
             )
         }
@@ -54,14 +51,6 @@ fun AppNavGraph(navController: NavHostController) {
             val viewModel: MyListViewModel = viewModel(factory = factory)
             MyListScreen(
                 viewModel = viewModel,
-                onNavigateBack = { navController.popBackStack() }
-            )
-        }
-
-        composable(Screen.Detail.route) { backStackEntry ->
-            val animeId = backStackEntry.arguments?.getString("animeId")?.toInt() ?: return@composable
-            DetailScreen(
-                animeId = animeId,
                 onNavigateBack = { navController.popBackStack() }
             )
         }
