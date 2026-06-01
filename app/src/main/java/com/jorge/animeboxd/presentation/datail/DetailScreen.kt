@@ -140,23 +140,23 @@ fun DetailScreen(
                     Row {
                         if (localWatched < anime.episodes) {
                             Text(
-                                text = "+10",
+                                text = "+1",
                                 style = MaterialTheme.typography.bodySmall.copy(color = VioletLight),
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(4.dp))
                                     .background(VioletDark.copy(alpha = 0.2f))
-                                    .clickable { localWatched = min(localWatched + 10, anime.episodes) }
+                                    .clickable { localWatched = min(localWatched + 1, anime.episodes) }
                                     .padding(horizontal = 8.dp, vertical = 4.dp)
                             )
                         }
                         if (localWatched > 0) {
                             Text(
-                                text = "-10",
+                                text = "-1",
                                 style = MaterialTheme.typography.bodySmall.copy(color = TextDim),
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(4.dp))
                                     .background(SurfaceCard)
-                                    .clickable { localWatched = max(localWatched - 10, 0) }
+                                    .clickable { localWatched = max(localWatched - 1, 0) }
                                     .padding(horizontal = 8.dp, vertical = 4.dp)
                             )
                         }
