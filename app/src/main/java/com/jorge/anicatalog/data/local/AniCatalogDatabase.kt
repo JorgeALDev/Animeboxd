@@ -7,10 +7,11 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [AnimeEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AniCatalogDatabase : RoomDatabase() {
+
     abstract fun animeDao(): AnimeDao
 
     companion object {
@@ -19,13 +20,14 @@ abstract class AniCatalogDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): AniCatalogDatabase {
             return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
+                Room.databaseBuilder(
                     context.applicationContext,
                     AniCatalogDatabase::class.java,
                     "anicatalog.db"
-                ).build()
-                INSTANCE = instance
-                instance
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                    .also { INSTANCE = it }
             }
         }
     }

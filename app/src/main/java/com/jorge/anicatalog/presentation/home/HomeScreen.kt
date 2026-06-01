@@ -1,11 +1,13 @@
 package com.jorge.anicatalog.presentation.home
 
+import com.jorge.anicatalog.data.local.AnimeEntity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -16,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jorge.anicatalog.data.local.AnimeEntity
 import com.jorge.anicatalog.presentation.mylist.MyListViewModel
 import com.jorge.anicatalog.ui.theme.*
 
@@ -24,11 +25,13 @@ import com.jorge.anicatalog.ui.theme.*
 fun HomeScreen(
     viewModel: MyListViewModel,
     onNavigateToCatalog: () -> Unit,
-    onNavigateToMyList: () -> Unit
+    onNavigateToMyList: () -> Unit,
+    onAnimeClick: (Int) -> Unit
 ) {
     val animes by viewModel.watchedAnimes.collectAsState()
-    val totalHours = viewModel.getTotalHours()
-    val avgRating = if (animes.isEmpty()) "—" else "%.1f".format(animes.map { it.userRating }.average())
+    val completedAnimes = animes.filter { it.status.uppercase() == "COMPLETED" }
+    val totalHours = completedAnimes.sumOf { it.episodes * it.episodeDurationMin } / 60
+    val totalMinutes = completedAnimes.sumOf { it.episodes * it.episodeDurationMin } % 60
     val recentAnimes = animes.take(3)
 
     Column(
@@ -39,11 +42,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(
-                    width = 0.5.dp,
-                    color = SurfaceBorder,
-                    shape = RoundedCornerShape(0.dp)
-                )
+                .border(width = 0.5.dp, color = SurfaceBorder, shape = RoundedCornerShape(0.dp))
                 .padding(horizontal = 20.dp)
                 .padding(top = 48.dp, bottom = 16.dp)
         ) {
@@ -59,7 +58,7 @@ fun HomeScreen(
                 Text(
                     text = "Ani",
                     style = MaterialTheme.typography.headlineMedium.copy(
-                        color = TextSecondary,
+                        color = VioletLight,
                         fontWeight = FontWeight.Light
                     )
                 )
@@ -85,9 +84,8 @@ fun HomeScreen(
         ) {
             StatsRow(
                 stats = listOf(
-                    animes.size.toString() to "animes",
-                    "${totalHours}h" to "assistidas",
-                    avgRating to "média"
+                    animes.size.toString() to "animes na lista",
+                    "${totalHours}h ${totalMinutes}min" to "assistidos (concluídos)"
                 )
             )
 
@@ -100,38 +98,37 @@ fun HomeScreen(
                 EmptyHint("Adicione animes pelo catálogo\npara vê-los aqui.")
             } else {
                 recentAnimes.forEach { entity ->
-                    HomeAnimeCard(entity)
-                    Spacer(Modifier.height(1.dp))
+                    HomeAnimeCard(
+                        entity = entity,
+                        onClick = { onAnimeClick(entity.id) }
+                    )
                 }
             }
 
             Spacer(Modifier.height(24.dp))
 
-            NoirButton(
+            AniButton(
                 label = "Ver catálogo",
                 filled = true,
                 onClick = onNavigateToCatalog
             )
             Spacer(Modifier.height(8.dp))
-            NoirButton(
+            AniButton(
                 label = "Minha lista completa",
                 filled = false,
                 onClick = onNavigateToMyList
             )
         }
-
-        BottomNav(current = "home", onHome = {}, onCatalog = onNavigateToCatalog, onList = onNavigateToMyList)
     }
 }
 
 @Composable
-private fun HomeAnimeCard(entity: AnimeEntity) {
+private fun HomeAnimeCard(entity: AnimeEntity, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(OledBlack)
-            .padding(vertical = 10.dp)
-            .border(width = 0.dp, color = SurfaceBorder),
+            .clickable { onClick() }
+            .padding(vertical = 10.dp),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -148,14 +145,12 @@ private fun HomeAnimeCard(entity: AnimeEntity) {
                 style = MaterialTheme.typography.labelSmall.copy(color = TextMuted),
                 modifier = Modifier.padding(vertical = 3.dp)
             )
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                StatusBadge(entity.status)
-                Spacer(Modifier.weight(1f))
-                Text(
-                    text = "%.1f".format(entity.userRating),
-                    style = MaterialTheme.typography.labelSmall.copy(color = TextMuted)
-                )
-            }
+            StarRating(
+                rating = entity.rating,
+                onRatingChange = {}
+            )
+            Spacer(Modifier.height(4.dp))
+            StatusBadge(entity.status)
         }
     }
     Spacer(

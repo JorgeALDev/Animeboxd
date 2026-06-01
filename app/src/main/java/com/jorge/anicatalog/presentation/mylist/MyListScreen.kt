@@ -4,29 +4,34 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.jorge.anicatalog.data.local.AnimeEntity
 import com.jorge.anicatalog.ui.theme.*
 
 @Composable
 fun MyListScreen(
     viewModel: MyListViewModel,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onNavigateToCatalog: () -> Unit,
+    onAnimeClick: (Int) -> Unit
 ) {
     val animes by viewModel.watchedAnimes.collectAsState()
-    val watching  = animes.filter { it.status.uppercase() == "WATCHING" }
-    val completed = animes.filter { it.status.uppercase() == "COMPLETED" }
-    val paused    = animes.filter { it.status.uppercase() == "PAUSED" }
 
     Column(
         modifier = Modifier
@@ -52,10 +57,15 @@ fun MyListScreen(
                         letterSpacing = 1.4.sp
                     )
                 )
+                // Apenas botão voltar estilizado (link removido)
                 Text(
                     text = "← voltar",
-                    style = MaterialTheme.typography.labelMedium.copy(color = TextMuted),
-                    modifier = Modifier.clickable { onNavigateBack() }
+                    style = MaterialTheme.typography.labelMedium.copy(color = VioletLight),
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(VioletDark.copy(alpha = 0.2f))
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                        .clickable { onNavigateBack() }
                 )
             }
             Spacer(Modifier.height(4.dp))
@@ -69,169 +79,119 @@ fun MyListScreen(
             )
         }
 
-        LazyColumn(
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = 16.dp),
-            contentPadding = PaddingValues(vertical = 12.dp)
+                .padding(horizontal = 12.dp),
+            contentPadding = PaddingValues(vertical = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item {
-                MiniStatsRow(
-                    stats = listOf(
-                        completed.size.toString() to "concluídos",
-                        watching.size.toString() to "assistindo",
-                        paused.size.toString() to "pausado"
-                    )
+            items(animes, key = { it.id }) { entity ->
+                MyListGridCard(
+                    entity = entity,
+                    onStatus = { s -> viewModel.updateStatus(entity, s) },
+                    onRemove = { viewModel.removeAnime(entity) },
+                    onRatingChange = { r -> viewModel.updateRating(entity, r) },
+                    onProgressChange = { p -> viewModel.updateWatchedEpisodes(entity, p) },
+                    onClick = { onAnimeClick(entity.id) }
                 )
-                Spacer(Modifier.height(16.dp))
             }
-
-            if (watching.isNotEmpty()) {
-                item { SectionHead("Assistindo"); Spacer(Modifier.height(8.dp)) }
-                items(watching, key = { "w_${it.id}" }) { entity ->
-                    MyListCard(
-                        entity = entity,
-                        onRating = { r -> viewModel.updateRating(entity, r) },
-                        onStatus = { s -> viewModel.updateStatus(entity, s) },
-                        onRemove = { viewModel.removeAnime(entity) }
-                    )
-                }
-                item { Spacer(Modifier.height(8.dp)) }
-            }
-
-            if (completed.isNotEmpty()) {
-                item { SectionHead("Concluídos"); Spacer(Modifier.height(8.dp)) }
-                items(completed, key = { "c_${it.id}" }) { entity ->
-                    MyListCard(
-                        entity = entity,
-                        onRating = { r -> viewModel.updateRating(entity, r) },
-                        onStatus = { s -> viewModel.updateStatus(entity, s) },
-                        onRemove = { viewModel.removeAnime(entity) }
-                    )
-                }
-                item { Spacer(Modifier.height(8.dp)) }
-            }
-
-            if (paused.isNotEmpty()) {
-                item { SectionHead("Pausados"); Spacer(Modifier.height(8.dp)) }
-                items(paused, key = { "p_${it.id}" }) { entity ->
-                    MyListCard(
-                        entity = entity,
-                        onRating = { r -> viewModel.updateRating(entity, r) },
-                        onStatus = { s -> viewModel.updateStatus(entity, s) },
-                        onRemove = { viewModel.removeAnime(entity) }
-                    )
-                }
-                item { Spacer(Modifier.height(8.dp)) }
-            }
-
             if (animes.isEmpty()) {
                 item {
-                    Spacer(Modifier.height(16.dp))
                     EmptyHint("Sua lista está vazia.\nAdicione animes pelo catálogo.")
                 }
             }
         }
-
-        BottomNav(current = "mylist", onHome = onNavigateBack, onCatalog = {}, onList = {})
     }
 }
 
 @Composable
-private fun MyListCard(
+private fun MyListGridCard(
     entity: AnimeEntity,
-    onRating: (Float) -> Unit,
     onStatus: (String) -> Unit,
-    onRemove: () -> Unit
+    onRemove: () -> Unit,
+    onRatingChange: (Float) -> Unit,
+    onProgressChange: (Int) -> Unit,
+    onClick: () -> Unit
 ) {
-    var localRating by remember(entity.id) { mutableStateOf(entity.userRating) }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(SurfaceCard)
+            .border(0.5.dp, SurfaceBorder, RoundedCornerShape(12.dp))
+            .clickable { onClick() }
     ) {
-        Row(
-            verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(2f / 3f)
         ) {
-            AnimeThumb(url = entity.imageUrl, description = entity.title)
-
-            Column(Modifier.weight(1f)) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Top
-                ) {
-                    Text(
-                        text = entity.title,
-                        style = MaterialTheme.typography.bodyMedium.copy(color = TextPrimary),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Text(
-                        text = "remover",
-                        style = MaterialTheme.typography.labelSmall.copy(color = TextDim),
-                        modifier = Modifier
-                            .clickable { onRemove() }
-                            .padding(start = 8.dp)
-                    )
-                }
-
-                Text(
-                    text = entity.genre,
-                    style = MaterialTheme.typography.labelSmall.copy(color = TextMuted),
-                    modifier = Modifier.padding(vertical = 3.dp)
-                )
-
+            AsyncImage(
+                model = entity.imageUrl,
+                contentDescription = entity.title,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(VioletDark.copy(alpha = 0.7f))
+                    .padding(4.dp),
+                contentAlignment = Alignment.Center
+            ) {
                 StatusBadge(entity.status)
-
-                Spacer(Modifier.height(8.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "sua nota",
-                        style = MaterialTheme.typography.labelSmall.copy(color = TextMuted)
-                    )
-                    Text(
-                        text = "%.1f".format(localRating),
-                        style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary)
-                    )
-                }
-                Slider(
-                    value = localRating,
-                    onValueChange = { localRating = it },
-                    onValueChangeFinished = { onRating(localRating) },
-                    valueRange = 0f..10f,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(20.dp),
-                    colors = SliderDefaults.colors(
-                        thumbColor = White,
-                        activeTrackColor = White,
-                        inactiveTrackColor = SurfaceBorder,
-                        activeTickColor = Color.Transparent,
-                        inactiveTickColor = Color.Transparent
-                    )
-                )
-
-                Spacer(Modifier.height(6.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    StatusButton("WATCHING",  "assistindo", entity.status, onStatus)
-                    StatusButton("COMPLETED", "concluído",  entity.status, onStatus)
-                    StatusButton("PAUSED",    "pausado",    entity.status, onStatus)
-                }
             }
         }
+        Column(
+            modifier = Modifier.padding(12.dp)
+        ) {
+            Text(
+                text = entity.title,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = TextPrimary,
+                    fontWeight = FontWeight.Medium
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = "${entity.genre} · ${entity.episodes} eps",
+                style = MaterialTheme.typography.labelSmall.copy(color = TextMuted),
+                modifier = Modifier.padding(vertical = 2.dp)
+            )
+            Spacer(Modifier.height(4.dp))
+            StarRating(
+                rating = entity.rating,
+                onRatingChange = onRatingChange
+            )
+            Spacer(Modifier.height(6.dp))
+            EpisodeProgress(
+                watched = entity.watchedEpisodes,
+                total = entity.episodes,
+                onProgressChange = onProgressChange
+            )
+            Spacer(Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                StatusButtonSmall("WATCHING", "assistindo", entity.status, onStatus)
+                StatusButtonSmall("COMPLETED", "concluído", entity.status, onStatus)
+                StatusButtonSmall("PAUSED", "pausado", entity.status, onStatus)
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = "remover",
+                style = MaterialTheme.typography.labelSmall.copy(color = TextDim),
+                modifier = Modifier
+                    .clickable { onRemove() }
+                    .padding(vertical = 4.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
     }
-    Spacer(
-        Modifier
-            .fillMaxWidth()
-            .height(0.5.dp)
-            .background(SurfaceBorder)
-    )
 }

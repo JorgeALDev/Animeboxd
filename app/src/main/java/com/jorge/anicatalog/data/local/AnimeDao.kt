@@ -22,7 +22,4 @@ interface AnimeDao {
 
     @Delete
     suspend fun delete(anime: AnimeEntity): Int
-
-    @Query("SELECT * FROM watched_animes WHERE id = :animeId LIMIT 1")
-    suspend fun getById(animeId: Int): AnimeEntity?
 }
