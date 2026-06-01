@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.jorge.anicatalog"
+    namespace = "com.jorge.animeboxd"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.jorge.anicatalog"
+        applicationId = "com.jorge.animeboxd"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
