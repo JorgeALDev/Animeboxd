@@ -1,10 +1,6 @@
 # Animeboxd
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/banner.png" alt="Animeboxd Banner">
-</p>
-
-<p align="center">
   <img src="https://img.shields.io/badge/Kotlin-100%25-7F52FF?logo=kotlin" alt="Kotlin Badge"/>
   <img src="https://img.shields.io/badge/Jetpack%20Compose-UI-4285F4" alt="Compose Badge"/>
   <img src="https://img.shields.io/badge/Room-Database-3DDC84" alt="Room Badge"/>
