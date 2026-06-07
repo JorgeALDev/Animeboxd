@@ -1,100 +1,119 @@
-# AniCatalog
+# Animeboxd
 
-<img src="https://img.shields.io/badge/Kotlin-100%25-7F52FF?logo=kotlin" alt="Kotlin Badge"/>
-<img src="https://img.shields.io/badge/Compose-UI-blue" alt="Jetpack Compose Badge"/>
-<img src="https://img.shields.io/badge/Platform-Android-green" alt="Android Badge"/>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/banner.png" alt="Animeboxd Banner">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Kotlin-100%25-7F52FF?logo=kotlin" alt="Kotlin Badge"/>
+  <img src="https://img.shields.io/badge/Jetpack%20Compose-UI-4285F4" alt="Compose Badge"/>
+  <img src="https://img.shields.io/badge/Room-Database-3DDC84" alt="Room Badge"/>
+  <img src="https://img.shields.io/badge/MVVM-Architecture-orange" alt="MVVM Badge"/>
+  <img src="https://img.shields.io/badge/Platform-Android-green" alt="Android Badge"/>
+</p>
 
 ## Sobre o Projeto
 
-O **AniCatalog** é um aplicativo Android desenvolvido em Kotlin utilizando Jetpack Compose. Seu objetivo é simular um catálogo de animes com tela de login simples e, após o acesso, apresentar uma lista interativa de animes exibidos em cards com imagem, título, gênero, nota e sinopse.
+O **Animeboxd** é um aplicativo Android inspirado no Letterboxd, desenvolvido utilizando **Kotlin**, **Jetpack Compose** e **Room**.
 
-O projeto foi criado como atividade acadêmica para aplicar conceitos fundamentais do desenvolvimento Android moderno como interfaces declarativas, navegação entre telas, modularização e uso de listas dinâmicas.
+O aplicativo permite explorar um catálogo de animes, organizar títulos em uma lista pessoal, alterar seu status de acompanhamento e visualizar estatísticas relacionadas ao progresso do usuário.
 
----
-
-## Objetivos e Requisitos Atendidos
-
-Este projeto atende às principais exigências propostas na atividade, incluindo:
-
-- Utilização da **linguagem Kotlin**
-- Criação de interface com **Jetpack Compose**
-- Tela de login (usuário e senha)
-- Navegação entre telas usando **Intents**
-- Listagem dinâmica de animes (**LazyColumn** / equivalente moderno ao RecyclerView)
-- Separação do código em múltiplos arquivos/componentes
-- Aplicação de **tema personalizado** (Material 3)
-- Estrutura de dados/modelo separado
-- Carregamento de imagens via internet com **Coil**
-- Separação clara de responsabilidades entre telas e componentes
+O projeto foi desenvolvido com foco em conceitos modernos do desenvolvimento Android, incluindo arquitetura **MVVM**, persistência local de dados e interfaces declarativas.
 
 ---
 
 ## Funcionalidades
 
-- **Tela de Login:** Campos para usuário e senha + botão de entrada
-- **Navegação:** Login redireciona para a tela principal do catálogo
-- **Tela Principal:** Exibe lista vertical de animes em formato de cards
-- **Card de Anime:** Imagem, título, gênero, nota, sinopse
-- **Botão de Sair:** Retorna para tela de login
-- Estrutura de dados modularizada (`Animes.kt`)
-- Carregamento de imagens a partir da web (Coil)
-- Navegação entre telas via **Intent** clássico
+* Catálogo de animes com busca por nome ou gênero
+* Adição de animes à lista pessoal
+* Alteração de status (Assistindo, Concluído e Pausado)
+* Remoção de animes da biblioteca pessoal
+* Estatísticas de acompanhamento
+* Persistência local utilizando Room
+* Atualização reativa com Flow
 
 ---
 
-## Tecnologias e Conceitos Utilizados
+## Tecnologias Utilizadas
 
-- **Kotlin**
-- **Jetpack Compose**
-- **Material 3**
-- **Activities** e **Intents**
-- **LazyColumn**
-- **Componentização com Composables**
-- **Gerenciamento de estado** (`remember`, `mutableStateOf`)
-- **Coil** para imagens remotas
-- **Organização modular** do código
+* Kotlin
+* Jetpack Compose
+* Material 3
+* Room Database
+* Coroutines
+* Flow
+* MVVM
+* Coil
 
 ---
 
 ## Estrutura do Projeto
 
-O projeto foi mantido simples, com os principais componentes separados em poucos arquivos:
+```text
+app/src/main/java/com/jorge/animeboxd/
 
-```
-app/src/main/java/com/jorge/anicatalog/
-├── MainActivity.kt      // Activity que exibe a tela de login
-├── LoginScreen.kt       // Composable da tela de login
-├── HomeActivity.kt      // Activity da tela principal (catálogo)
-├── HomeScreen.kt        // Composable da tela principal + AnimeCard
-└── Anime.kt             // data class Anime + lista estática (animes)
-```
-
-Tema do app:
-```
-app/src/main/java/com/jorge/anicatalog/ui/theme/
+├── data/
+│   ├── local/
+│   │   ├── AnimeDao.kt
+│   │   ├── AnimeEntity.kt
+│   │   └── AnimeDatabase.kt
+│   │
+│   └── repository/
+│       └── AnimeRepository.kt
+│
+├── domain/
+│   └── model/
+│
+├── presentation/
+│   ├── catalog/
+│   ├── home/
+│   ├── mylist/
+│   └── navigation/
+│
+└── ui/
+    └── theme/
 ```
 
 ---
 
-## Aprendizados e Práticas Realizadas
+## Capturas de Tela
 
-Durante o desenvolvimento, foram aplicados conceitos como:
+### Tela Inicial
 
-- Construção de **interfaces declarativas** com Compose
-- Criação de componentes **reutilizáveis** e modulares
-- **Separação de responsabilidades** para maior manutenção e legibilidade
-- **Navegação tradicional** entre telas (Activities + Intents)
-- Utilização de listas eficientes (**LazyColumn**)
-- Organização de projeto visando escalabilidade e boas práticas
+<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/home.png" width="250">
+
+### Catálogo
+
+<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/catalog.png" width="250">
+
+### Minha Lista
+
+<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/mylist.png" width="250">
+
+### Estatísticas
+
+<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/stats.png" width="250">
 
 ---
 
-## Considerações Finais
+## Como Executar
 
-Este projeto é uma base exemplar para quem está iniciando com Android moderno e Jetpack Compose, podendo ser expandido futuramente com conceitos mais avançados como o uso de Navigation, ViewModel, persistência de dados, integração de API e muito mais.
+1. Clone o repositório
 
-Fique à vontade para explorar, sugerir melhorias ou adaptar para seus próprios estudos!
+```bash
+git clone https://github.com/JorgeALDev/Animeboxd.git
+```
+
+2. Abra o projeto no Android Studio
+
+3. Aguarde a sincronização do Gradle
+
+4. Execute em um emulador ou dispositivo Android
 
 ---
 
-> Projeto desenvolvido por [JorgeALDev](https://github.com/JorgeALDev) | Atividade acadêmica.
+## Desenvolvido por
+
+**Jorge Alves**
+
+GitHub: https://github.com/JorgeALDev/Animeboxd
