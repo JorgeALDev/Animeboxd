@@ -1,9 +1,7 @@
 package com.jorge.animeboxd.presentation.home
 
-import com.jorge.animeboxd.data.local.AnimeEntity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jorge.animeboxd.data.local.AnimeEntity
 import com.jorge.animeboxd.presentation.mylist.MyListViewModel
 import com.jorge.animeboxd.ui.theme.*
 
@@ -25,8 +24,7 @@ import com.jorge.animeboxd.ui.theme.*
 fun HomeScreen(
     viewModel: MyListViewModel,
     onNavigateToCatalog: () -> Unit,
-    onNavigateToMyList: () -> Unit,
-    onAnimeClick: (Int) -> Unit
+    onNavigateToMyList: () -> Unit
 ) {
     val animes by viewModel.watchedAnimes.collectAsState()
     val completedAnimes = animes.filter { it.status.uppercase() == "COMPLETED" }
@@ -98,10 +96,7 @@ fun HomeScreen(
                 EmptyHint("Adicione animes pelo catálogo\npara vê-los aqui.")
             } else {
                 recentAnimes.forEach { entity ->
-                    HomeAnimeCard(
-                        entity = entity,
-                        onClick = { onAnimeClick(entity.id) }
-                    )
+                    HomeAnimeCard(entity)
                 }
             }
 
@@ -123,11 +118,10 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeAnimeCard(entity: AnimeEntity, onClick: () -> Unit) {
+private fun HomeAnimeCard(entity: AnimeEntity) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() }
             .padding(vertical = 10.dp),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -145,11 +139,6 @@ private fun HomeAnimeCard(entity: AnimeEntity, onClick: () -> Unit) {
                 style = MaterialTheme.typography.labelSmall.copy(color = TextMuted),
                 modifier = Modifier.padding(vertical = 3.dp)
             )
-            StarRating(
-                rating = entity.rating,
-                onRatingChange = {}
-            )
-            Spacer(Modifier.height(4.dp))
             StatusBadge(entity.status)
         }
     }

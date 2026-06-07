@@ -9,13 +9,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.jorge.animeboxd.presentation.navigation.AppNavGraph
-import com.jorge.animeboxd.ui.theme.AniCatalogTheme
+import com.jorge.animeboxd.ui.theme.AnimeboxdTheme  // renomeado
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AniCatalogTheme {
+            AnimeboxdTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

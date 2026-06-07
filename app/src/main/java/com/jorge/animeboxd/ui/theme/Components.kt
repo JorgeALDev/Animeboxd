@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -16,7 +15,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,10 +22,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.StarBorder
-import androidx.compose.material.icons.filled.StarHalf
 
 @Composable
 fun SectionHead(label: String, modifier: Modifier = Modifier) {
@@ -242,94 +236,6 @@ fun StatusButton(
                 color = if (isActive) VioletLight else TextMuted
             )
         )
-    }
-}
-
-@Composable
-fun StatusButtonSmall(
-    value: String,
-    label: String,
-    current: String,
-    onStatus: (String) -> Unit
-) {
-    val isActive = current.uppercase() == value
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(
-                if (isActive) VioletPrimary.copy(alpha = 0.2f) else Color.Transparent
-            )
-            .border(
-                width = 0.5.dp,
-                color = if (isActive) VioletLight.copy(alpha = 0.6f) else SurfaceBorder,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .clickable { onStatus(value) }
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall.copy(
-                fontSize = 10.sp,
-                color = if (isActive) VioletLight else TextMuted
-            )
-        )
-    }
-}
-
-@Composable
-fun StarRating(rating: Float, onRatingChange: (Float) -> Unit) {
-    Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-        for (i in 1..5) {
-            val icon: ImageVector = when {
-                rating >= i -> Icons.Default.Star
-                rating >= i - 0.5f -> Icons.Default.StarHalf
-                else -> Icons.Default.StarBorder
-            }
-            Icon(
-                imageVector = icon,
-                contentDescription = "Estrela $i",
-                tint = if (rating >= i - 0.5f) AmberPaused else TextMuted,
-                modifier = Modifier
-                    .size(18.dp)
-                    .clickable { onRatingChange(i.toFloat()) }
-            )
-        }
-    }
-}
-
-@Composable
-fun EpisodeProgress(
-    watched: Int,
-    total: Int,
-    onProgressChange: (Int) -> Unit
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(
-            text = "$watched/$total eps",
-            style = MaterialTheme.typography.labelSmall.copy(color = TextMuted)
-        )
-        if (watched < total) {
-            Text(
-                text = "+",
-                style = MaterialTheme.typography.labelSmall.copy(color = VioletLight),
-                modifier = Modifier
-                    .clickable { onProgressChange(watched + 1) }
-                    .padding(horizontal = 4.dp)
-            )
-        }
-        if (watched > 0) {
-            Text(
-                text = "-",
-                style = MaterialTheme.typography.labelSmall.copy(color = TextDim),
-                modifier = Modifier
-                    .clickable { onProgressChange(watched - 1) }
-                    .padding(horizontal = 4.dp)
-            )
-        }
     }
 }
 

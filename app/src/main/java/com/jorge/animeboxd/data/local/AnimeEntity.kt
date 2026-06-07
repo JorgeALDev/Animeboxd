@@ -12,7 +12,5 @@ data class AnimeEntity(
     val episodes: Int,
     val episodeDurationMin: Int,
     val status: String,
-    val watchedEpisodes: Int = 0,
-    val rating: Float = 0f,
     val addedAt: Long = System.currentTimeMillis()
 )

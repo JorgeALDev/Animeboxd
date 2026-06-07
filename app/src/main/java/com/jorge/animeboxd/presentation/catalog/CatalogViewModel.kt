@@ -58,9 +58,7 @@ class CatalogViewModel(private val repository: AnimeRepository) : ViewModel() {
                     imageUrl = anime.imagemUrl,
                     episodes = anime.episodios,
                     episodeDurationMin = anime.duracaoEpMin,
-                    status = "WATCHING",
-                    watchedEpisodes = 0,
-                    rating = 0f
+                    status = "WATCHING"
                 )
             )
         }
@@ -75,9 +73,7 @@ class CatalogViewModel(private val repository: AnimeRepository) : ViewModel() {
                 imageUrl = anime.imagemUrl,
                 episodes = anime.episodios,
                 episodeDurationMin = anime.duracaoEpMin,
-                status = "",
-                watchedEpisodes = 0,
-                rating = 0f
+                status = ""
             )
             repository.removeAnime(entity)
         }

@@ -1,8 +1,8 @@
 package com.jorge.animeboxd.presentation.mylist
 
-import com.jorge.animeboxd.data.local.AnimeEntity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jorge.animeboxd.data.local.AnimeEntity
 import com.jorge.animeboxd.data.repository.AnimeRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,15 +21,6 @@ class MyListViewModel(private val repository: AnimeRepository) : ViewModel() {
 
     fun updateStatus(anime: AnimeEntity, newStatus: String) {
         viewModelScope.launch { repository.updateAnime(anime.copy(status = newStatus)) }
-    }
-
-    fun updateRating(anime: AnimeEntity, newRating: Float) {
-        viewModelScope.launch { repository.updateAnime(anime.copy(rating = newRating)) }
-    }
-
-    fun updateWatchedEpisodes(anime: AnimeEntity, newWatched: Int) {
-        val clamped = newWatched.coerceIn(0, anime.episodes)
-        viewModelScope.launch { repository.updateAnime(anime.copy(watchedEpisodes = clamped)) }
     }
 
     fun getTotalHours(): Int {

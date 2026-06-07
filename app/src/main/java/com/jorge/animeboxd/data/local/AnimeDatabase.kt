@@ -10,19 +10,19 @@ import androidx.room.RoomDatabase
     version = 2,
     exportSchema = false
 )
-abstract class AniCatalogDatabase : RoomDatabase() {
+abstract class AnimeDatabase : RoomDatabase() {
 
     abstract fun animeDao(): AnimeDao
 
     companion object {
         @Volatile
-        private var INSTANCE: AniCatalogDatabase? = null
+        private var INSTANCE: AnimeDatabase? = null
 
-        fun getInstance(context: Context): AniCatalogDatabase {
+        fun getInstance(context: Context): AnimeDatabase {
             return INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(
                     context.applicationContext,
-                    AniCatalogDatabase::class.java,
+                    AnimeDatabase::class.java,
                     "anicatalog.db"
                 )
                     .fallbackToDestructiveMigration()

@@ -8,12 +8,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,8 +23,7 @@ import com.jorge.animeboxd.ui.theme.*
 @Composable
 fun CatalogScreen(
     viewModel: CatalogViewModel,
-    onNavigateBack: () -> Unit,
-    onNavigateToMyList: () -> Unit
+    onNavigateBack: () -> Unit
 ) {
     val searchQuery by viewModel.searchQuery.collectAsState()
     val animes = viewModel.filteredAnimes
@@ -55,15 +54,10 @@ fun CatalogScreen(
                         letterSpacing = 1.4.sp
                     )
                 )
-                // Botão voltar estilizado (sem link "minha lista →")
                 Text(
                     text = "← voltar",
                     style = MaterialTheme.typography.labelMedium.copy(color = VioletLight),
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(VioletDark.copy(alpha = 0.2f))
-                        .padding(horizontal = 12.dp, vertical = 6.dp)
-                        .clickable { onNavigateBack() }
+                    modifier = Modifier.clickable { onNavigateBack() }
                 )
             }
             Spacer(Modifier.height(4.dp))
@@ -101,29 +95,34 @@ fun CatalogScreen(
             }
         }
 
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 16.dp),
-            contentPadding = PaddingValues(vertical = 12.dp)
-        ) {
-            if (isLoading) {
-                items(5) {
-                    CardShimmer()
-                }
-            } else if (animes.isEmpty()) {
-                item {
-                    Spacer(Modifier.height(32.dp))
-                    EmptyHint("Nenhum anime encontrado\npara \"$searchQuery\"")
-                }
-            } else {
-                items(animes, key = { it.id }) { anime ->
-                    CatalogCard(
-                        anime = anime,
-                        isAdded = anime.id in savedIds,
-                        onAdd = { viewModel.addToMyList(anime) },
-                        onRemove = { viewModel.removeFromMyList(anime) }
-                    )
+        if (isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = VioletLight)
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 16.dp),
+                contentPadding = PaddingValues(vertical = 12.dp)
+            ) {
+                if (animes.isEmpty()) {
+                    item {
+                        Spacer(Modifier.height(32.dp))
+                        EmptyHint("Nenhum anime encontrado\npara \"$searchQuery\"")
+                    }
+                } else {
+                    items(animes, key = { it.id }) { anime ->
+                        CatalogCard(
+                            anime = anime,
+                            isAdded = anime.id in savedIds,
+                            onAdd = { viewModel.addToMyList(anime) },
+                            onRemove = { viewModel.removeFromMyList(anime) }
+                        )
+                    }
                 }
             }
         }
@@ -190,48 +189,4 @@ private fun CatalogCard(anime: Anime, isAdded: Boolean, onAdd: () -> Unit, onRem
             .height(0.5.dp)
             .background(SurfaceBorder)
     )
-}
-
-@Composable
-fun CardShimmer() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 10.dp),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .width(56.dp)
-                .height(78.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(SurfaceHigh)
-        )
-        Column(Modifier.weight(1f)) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(16.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(SurfaceBorder)
-            )
-            Spacer(Modifier.height(8.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.4f)
-                    .height(12.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(SurfaceBorder)
-            )
-            Spacer(Modifier.height(8.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .height(24.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(SurfaceBorder)
-            )
-        }
-    }
 }
