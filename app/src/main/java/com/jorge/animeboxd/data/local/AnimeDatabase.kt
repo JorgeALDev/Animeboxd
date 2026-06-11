@@ -23,7 +23,7 @@ abstract class AnimeDatabase : RoomDatabase() {
                 Room.databaseBuilder(
                     context.applicationContext,
                     AnimeDatabase::class.java,
-                    "anicatalog.db"
+                    "aniboxd.db"
                 )
                     .fallbackToDestructiveMigration()
                     .build()

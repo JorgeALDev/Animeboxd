@@ -17,20 +17,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jorge.animeboxd.data.local.AnimeEntity
-import com.jorge.animeboxd.presentation.mylist.MyListViewModel
+import com.jorge.animeboxd.presentation.minhaLista.MinhaListaViewModel
 import com.jorge.animeboxd.ui.theme.*
 
 @Composable
 fun HomeScreen(
-    viewModel: MyListViewModel,
+    viewModel: MinhaListaViewModel,
     onNavigateToCatalog: () -> Unit,
     onNavigateToMyList: () -> Unit
 ) {
-    val animes by viewModel.watchedAnimes.collectAsState()
-    val completedAnimes = animes.filter { it.status.uppercase() == "COMPLETED" }
-    val totalHours = completedAnimes.sumOf { it.episodes * it.episodeDurationMin } / 60
-    val totalMinutes = completedAnimes.sumOf { it.episodes * it.episodeDurationMin } % 60
-    val recentAnimes = animes.take(3)
+    val animes by viewModel.animesSalvos.collectAsState()
+    val totalHoras = viewModel.obterTotalHoras()
+    val totalMinutos = viewModel.obterMinutosRestantes()
+    val animesRecentes = animes.take(3)
 
     Column(
         modifier = Modifier
@@ -83,7 +82,7 @@ fun HomeScreen(
             StatsRow(
                 stats = listOf(
                     animes.size.toString() to "animes na lista",
-                    "${totalHours}h ${totalMinutes}min" to "assistidos (concluídos)"
+                    "${totalHoras}h ${totalMinutos}min" to "assistidos (concluídos)"
                 )
             )
 
@@ -92,10 +91,10 @@ fun HomeScreen(
             SectionHead(label = "Recentes")
             Spacer(Modifier.height(12.dp))
 
-            if (recentAnimes.isEmpty()) {
+            if (animesRecentes.isEmpty()) {
                 EmptyHint("Adicione animes pelo catálogo\npara vê-los aqui.")
             } else {
-                recentAnimes.forEach { entity ->
+                animesRecentes.forEach { entity ->
                     HomeAnimeCard(entity)
                 }
             }

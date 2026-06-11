@@ -9,7 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.jorge.animeboxd.presentation.navigation.AppNavGraph
-import com.jorge.animeboxd.ui.theme.AnimeboxdTheme  // renomeado
+import com.jorge.animeboxd.ui.theme.AnimeboxdTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

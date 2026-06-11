@@ -9,11 +9,11 @@ import androidx.navigation.compose.composable
 import com.jorge.animeboxd.data.local.AnimeDatabase
 import com.jorge.animeboxd.data.repository.AnimeRepository
 import com.jorge.animeboxd.presentation.ViewModelFactory
-import com.jorge.animeboxd.presentation.catalog.CatalogScreen
-import com.jorge.animeboxd.presentation.catalog.CatalogViewModel
+import com.jorge.animeboxd.presentation.catalogo.CatalogoScreen
+import com.jorge.animeboxd.presentation.catalogo.CatalogoViewModel
 import com.jorge.animeboxd.presentation.home.HomeScreen
-import com.jorge.animeboxd.presentation.mylist.MyListScreen
-import com.jorge.animeboxd.presentation.mylist.MyListViewModel
+import com.jorge.animeboxd.presentation.minhaLista.MinhaListaScreen
+import com.jorge.animeboxd.presentation.minhaLista.MinhaListaViewModel
 
 sealed class Screen(val route: String) {
     object Home    : Screen("home")
@@ -33,7 +33,7 @@ fun AppNavGraph(navController: NavHostController) {
         startDestination = Screen.Home.route
     ) {
         composable(Screen.Home.route) {
-            val viewModel: MyListViewModel = viewModel(factory = factory)
+            val viewModel: MinhaListaViewModel = viewModel(factory = factory)
             HomeScreen(
                 viewModel = viewModel,
                 onNavigateToCatalog = { navController.navigate(Screen.Catalog.route) },
@@ -42,19 +42,18 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         composable(Screen.Catalog.route) {
-            val viewModel: CatalogViewModel = viewModel(factory = factory)
-            CatalogScreen(
+            val viewModel: CatalogoViewModel = viewModel(factory = factory)
+            CatalogoScreen(
                 viewModel = viewModel,
                 onNavigateBack = { navController.popBackStack() }
             )
         }
 
         composable(Screen.MyList.route) {
-            val viewModel: MyListViewModel = viewModel(factory = factory)
-            MyListScreen(
+            val viewModel: MinhaListaViewModel = viewModel(factory = factory)
+            MinhaListaScreen(
                 viewModel = viewModel,
-                onNavigateBack = { navController.popBackStack() },
-                onNavigateToCatalog = { navController.navigate(Screen.Catalog.route) }
+                onNavigateBack = { navController.popBackStack() }
             )
         }
     }

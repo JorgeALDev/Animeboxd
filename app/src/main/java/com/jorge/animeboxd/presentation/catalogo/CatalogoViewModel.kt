@@ -1,4 +1,4 @@
-package com.jorge.animeboxd.presentation.catalog
+package com.jorge.animeboxd.presentation.catalogo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,23 +14,23 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 
-class CatalogViewModel(private val repository: AnimeRepository) : ViewModel() {
+class CatalogoViewModel(private val repositorio: AnimeRepository) : ViewModel() {
 
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+    private val _busca = MutableStateFlow("")
+    val busca: StateFlow<String> = _busca.asStateFlow()
 
-    private val _isLoading = MutableStateFlow(true)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    private val _estaCarregando = MutableStateFlow(true)
+    val estaCarregando: StateFlow<Boolean> = _estaCarregando.asStateFlow()
 
-    val filteredAnimes: List<Anime>
-        get() = if (_searchQuery.value.isBlank()) animes
+    val animesFiltrados: List<Anime>
+        get() = if (_busca.value.isBlank()) animes
         else animes.filter {
-            it.titulo.contains(_searchQuery.value, ignoreCase = true) ||
-                    it.genero.contains(_searchQuery.value, ignoreCase = true)
+            it.titulo.contains(_busca.value, ignoreCase = true) ||
+                    it.genero.contains(_busca.value, ignoreCase = true)
         }
 
-    val savedIds: StateFlow<Set<Int>> = repository.getWatchedAnimes()
-        .map<List<AnimeEntity>, Set<Int>> { list -> list.map { it.id }.toSet() }
+    val idsSalvos: StateFlow<Set<Int>> = repositorio.getWatchedAnimes()
+        .map<List<AnimeEntity>, Set<Int>> { lista -> lista.map { it.id }.toSet() }
         .stateIn(
             scope = viewModelScope,
             started = kotlinx.coroutines.flow.SharingStarted.Eagerly,
@@ -40,17 +40,17 @@ class CatalogViewModel(private val repository: AnimeRepository) : ViewModel() {
     init {
         viewModelScope.launch {
             delay(500)
-            _isLoading.value = false
+            _estaCarregando.value = false
         }
     }
 
-    fun onSearchChange(query: String) {
-        _searchQuery.value = query
+    fun aoMudarBusca(texto: String) {
+        _busca.value = texto
     }
 
-    fun addToMyList(anime: Anime) {
+    fun adicionarNaLista(anime: Anime) {
         viewModelScope.launch {
-            repository.addAnime(
+            repositorio.addAnime(
                 AnimeEntity(
                     id = anime.id,
                     title = anime.titulo,
@@ -64,9 +64,9 @@ class CatalogViewModel(private val repository: AnimeRepository) : ViewModel() {
         }
     }
 
-    fun removeFromMyList(anime: Anime) {
+    fun removerDaLista(anime: Anime) {
         viewModelScope.launch {
-            val entity = AnimeEntity(
+            val entidade = AnimeEntity(
                 id = anime.id,
                 title = anime.titulo,
                 genre = anime.genero,
@@ -75,7 +75,7 @@ class CatalogViewModel(private val repository: AnimeRepository) : ViewModel() {
                 episodeDurationMin = anime.duracaoEpMin,
                 status = ""
             )
-            repository.removeAnime(entity)
+            repositorio.removeAnime(entidade)
         }
     }
 }

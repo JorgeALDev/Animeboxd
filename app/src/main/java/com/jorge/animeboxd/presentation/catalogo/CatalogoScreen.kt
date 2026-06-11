@@ -1,4 +1,4 @@
-package com.jorge.animeboxd.presentation.catalog
+package com.jorge.animeboxd.presentation.catalogo
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,14 +21,14 @@ import com.jorge.animeboxd.domain.model.Anime
 import com.jorge.animeboxd.ui.theme.*
 
 @Composable
-fun CatalogScreen(
-    viewModel: CatalogViewModel,
+fun CatalogoScreen(
+    viewModel: CatalogoViewModel,
     onNavigateBack: () -> Unit
 ) {
-    val searchQuery by viewModel.searchQuery.collectAsState()
-    val animes = viewModel.filteredAnimes
-    val savedIds by viewModel.savedIds.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
+    val busca by viewModel.busca.collectAsState()
+    val animes = viewModel.animesFiltrados
+    val idsSalvos by viewModel.idsSalvos.collectAsState()
+    val estaCarregando by viewModel.estaCarregando.collectAsState()
 
     Column(
         modifier = Modifier
@@ -79,15 +79,15 @@ fun CatalogScreen(
                     .background(SurfaceCard, RoundedCornerShape(6.dp))
                     .padding(horizontal = 12.dp, vertical = 10.dp)
             ) {
-                if (searchQuery.isEmpty()) {
+                if (busca.isEmpty()) {
                     Text(
                         text = "buscar anime...",
                         style = MaterialTheme.typography.bodySmall.copy(color = TextDim)
                     )
                 }
                 BasicTextField(
-                    value = searchQuery,
-                    onValueChange = { viewModel.onSearchChange(it) },
+                    value = busca,
+                    onValueChange = { viewModel.aoMudarBusca(it) },
                     singleLine = true,
                     textStyle = MaterialTheme.typography.bodySmall.copy(color = TextPrimary),
                     modifier = Modifier.fillMaxWidth()
@@ -95,7 +95,7 @@ fun CatalogScreen(
             }
         }
 
-        if (isLoading) {
+        if (estaCarregando) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -112,15 +112,15 @@ fun CatalogScreen(
                 if (animes.isEmpty()) {
                     item {
                         Spacer(Modifier.height(32.dp))
-                        EmptyHint("Nenhum anime encontrado\npara \"$searchQuery\"")
+                        EmptyHint("Nenhum anime encontrado\npara \"$busca\"")
                     }
                 } else {
                     items(animes, key = { it.id }) { anime ->
-                        CatalogCard(
+                        CatalogoCard(
                             anime = anime,
-                            isAdded = anime.id in savedIds,
-                            onAdd = { viewModel.addToMyList(anime) },
-                            onRemove = { viewModel.removeFromMyList(anime) }
+                            estaAdicionado = anime.id in idsSalvos,
+                            aoAdicionar = { viewModel.adicionarNaLista(anime) },
+                            aoRemover = { viewModel.removerDaLista(anime) }
                         )
                     }
                 }
@@ -130,7 +130,12 @@ fun CatalogScreen(
 }
 
 @Composable
-private fun CatalogCard(anime: Anime, isAdded: Boolean, onAdd: () -> Unit, onRemove: () -> Unit) {
+private fun CatalogoCard(
+    anime: Anime,
+    estaAdicionado: Boolean,
+    aoAdicionar: () -> Unit,
+    aoRemover: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -162,20 +167,20 @@ private fun CatalogCard(anime: Anime, isAdded: Boolean, onAdd: () -> Unit, onRem
                     modifier = Modifier
                         .border(
                             width = 0.5.dp,
-                            color = if (isAdded) GreenDoneBorder else SurfaceBorder,
+                            color = if (estaAdicionado) GreenDoneBorder else SurfaceBorder,
                             shape = RoundedCornerShape(3.dp)
                         )
                         .background(
-                            color = if (isAdded) GreenDoneBg else OledBlack,
+                            color = if (estaAdicionado) GreenDoneBg else OledBlack,
                             shape = RoundedCornerShape(3.dp)
                         )
-                        .clickable { if (isAdded) onRemove() else onAdd() }
+                        .clickable { if (estaAdicionado) aoRemover() else aoAdicionar() }
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text = if (isAdded) "remover ✗" else "+ adicionar",
+                        text = if (estaAdicionado) "remover ✗" else "+ adicionar",
                         style = MaterialTheme.typography.labelSmall.copy(
-                            color = if (isAdded) GreenDone else TextSecondary,
+                            color = if (estaAdicionado) GreenDone else TextSecondary,
                             letterSpacing = 0.4.sp
                         )
                     )
