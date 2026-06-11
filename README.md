@@ -64,13 +64,13 @@ app/src/main/java/com/jorge/animeboxd/
 ## Capturas de Tela
 
 Tela Inicial
-<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/home.png" width="250">
+<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/README/home.png" width="250">
 
 Catálogo
-<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/catalog.png" width="250">
+<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/README/catalogo.png" width="250">
 
 Minha Lista
-<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/mylist.png" width="250">
+<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/README/minhaLista.png" width="250">
 
 
 ## Como Executar
