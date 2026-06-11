@@ -65,8 +65,10 @@ app/src/main/java/com/jorge/animeboxd/
 
 Tela Inicial
 <img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/home.png" width="250">
+
 Catálogo
 <img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/catalog.png" width="250">
+
 Minha Lista
 <img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/mylist.png" width="250">
 
@@ -75,8 +77,11 @@ Minha Lista
 
 1.Clone o repositório:
 git clone https://github.com/JorgeALDev/Animeboxd.git
+
 2.Abra o projeto no Android Studio
+
 3.Aguarde a sincronização do Gradle
+
 4.Execute em um emulador ou dispositivo Android
 
 Desenvolvido por
