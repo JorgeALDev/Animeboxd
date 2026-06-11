@@ -65,15 +65,15 @@ app/src/main/java/com/jorge/animeboxd/
 
 ### Tela Inicial
 
-<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/home.jpeg" width="250">
+<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/screenshots/home.jpeg" width="250">
 
 ### Catálogo
 
-<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/catalogo.jpeg" width="250">
+<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/screenshots/catalogo.jpeg" width="250">
 
 ### Minha Lista
 
-<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/minhaLista.jpeg" width="250">
+<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/screenshots/minhaLista.jpeg" width="250">
 
 
 ## Como Executar
