@@ -10,42 +10,33 @@
 
 ## Sobre o Projeto
 
-O **Animeboxd** é um aplicativo Android inspirado no Letterboxd, desenvolvido utilizando **Kotlin**, **Jetpack Compose** e **Room**.
-
-O aplicativo permite explorar um catálogo de animes, organizar títulos em uma lista pessoal, alterar seu status de acompanhamento e visualizar estatísticas relacionadas ao progresso do usuário.
+O **Animeboxd** é um aplicativo Android inspirado no Letterboxd, desenvolvido utilizando **Kotlin**, **Jetpack Compose** e **Room**. O aplicativo permite explorar um catálogo de animes, organizar títulos em uma lista pessoal, alterar seu status de acompanhamento e visualizar estatísticas relacionadas ao progresso do usuário.
 
 O projeto foi desenvolvido com foco em conceitos modernos do desenvolvimento Android, incluindo arquitetura **MVVM**, persistência local de dados e interfaces declarativas.
 
----
-
 ## Funcionalidades
 
-* Catálogo de animes com busca por nome ou gênero
-* Adição de animes à lista pessoal
-* Alteração de status (Assistindo, Concluído e Pausado)
-* Remoção de animes da biblioteca pessoal
-* Estatísticas de acompanhamento
-* Persistência local utilizando Room
-* Atualização reativa com Flow
-
----
+- Catálogo de animes com busca por nome ou gênero
+- Adição e remoção de animes da lista pessoal
+- Alteração de status (Assistindo, Concluído, Pausado)
+- Estatísticas de tempo total assistido (apenas animes concluídos)
+- Persistência local utilizando Room
+- Atualização reativa com Flow
 
 ## Tecnologias Utilizadas
 
-* Kotlin
-* Jetpack Compose
-* Material 3
-* Room Database
-* Coroutines
-* Flow
-* MVVM
-* Coil
-
----
+- Kotlin
+- Jetpack Compose
+- Material 3
+- Room Database
+- Coroutines
+- Flow
+- MVVM
+- Coil
 
 ## Estrutura do Projeto
 
-```text
+```
 app/src/main/java/com/jorge/animeboxd/
 
 ├── data/
@@ -61,55 +52,34 @@ app/src/main/java/com/jorge/animeboxd/
 │   └── model/
 │
 ├── presentation/
-│   ├── catalog/
+│   ├── catalogo/
 │   ├── home/
-│   ├── mylist/
+│   ├── minhaLista/
 │   └── navigation/
 │
 └── ui/
     └── theme/
 ```
-
----
-
+    
 ## Capturas de Tela
 
-### Tela Inicial
-
+Tela Inicial
 <img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/home.png" width="250">
-
-### Catálogo
-
+Catálogo
 <img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/catalog.png" width="250">
-
-### Minha Lista
-
+Minha Lista
 <img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/mylist.png" width="250">
 
-### Estatísticas
-
-<img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/stats.png" width="250">
-
----
 
 ## Como Executar
 
-1. Clone o repositório
-
-```bash
+1.Clone o repositório:
 git clone https://github.com/JorgeALDev/Animeboxd.git
-```
+2.Abra o projeto no Android Studio
+3.Aguarde a sincronização do Gradle
+4.Execute em um emulador ou dispositivo Android
 
-2. Abra o projeto no Android Studio
-
-3. Aguarde a sincronização do Gradle
-
-4. Execute em um emulador ou dispositivo Android
-
----
-
-## Desenvolvido por
-
-**Jorge Alves**
+Desenvolvido por
+Jorge Araújo
 
 GitHub: https://github.com/JorgeALDev/Animeboxd
