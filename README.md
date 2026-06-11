@@ -87,4 +87,4 @@ git clone https://github.com/JorgeALDev/Animeboxd.git
 Desenvolvido por
 Jorge Araújo
 
-GitHub: https://github.com/JorgeALDev/Animeboxd
+GitHub: https://github.com/JorgeALDev
