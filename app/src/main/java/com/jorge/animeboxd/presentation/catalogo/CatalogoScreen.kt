@@ -25,16 +25,21 @@ fun CatalogoScreen(
     viewModel: CatalogoViewModel,
     onNavigateBack: () -> Unit
 ) {
+    // Coleta de todos os estados observáveis
     val busca by viewModel.busca.collectAsState()
     val animes = viewModel.animesFiltrados
     val idsSalvos by viewModel.idsSalvos.collectAsState()
     val estaCarregando by viewModel.estaCarregando.collectAsState()
+    val erro by viewModel.erro.collectAsState()
+    val paginaAtual by viewModel.paginaAtual.collectAsState()
+    val totalPaginas by viewModel.totalPaginas.collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(OledBlack)
     ) {
+        // Cabeçalho (busca, título, etc.) – sem alterações
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -95,12 +100,24 @@ fun CatalogoScreen(
             }
         }
 
+        // Corpo: loading, erro ou lista
         if (estaCarregando) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(color = VioletLight)
+            }
+        } else if (erro != null) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = erro!!,
+                    color = TextMuted,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         } else {
             LazyColumn(
@@ -123,12 +140,47 @@ fun CatalogoScreen(
                             aoRemover = { viewModel.removerDaLista(anime) }
                         )
                     }
+
+                    // Controles de paginação como um item separado
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 12.dp),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            if (paginaAtual > 1) {
+                                Text(
+                                    text = "Anterior",
+                                    style = MaterialTheme.typography.labelMedium.copy(color = VioletLight),
+                                    modifier = Modifier
+                                        .clickable { viewModel.irParaPagina(paginaAtual - 1) }
+                                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                                )
+                            }
+                            Text(
+                                text = "Página $paginaAtual",
+                                style = MaterialTheme.typography.labelSmall.copy(color = TextMuted)
+                            )
+                            if (paginaAtual < totalPaginas) {
+                                Text(
+                                    text = "Próximo",
+                                    style = MaterialTheme.typography.labelMedium.copy(color = VioletLight),
+                                    modifier = Modifier
+                                        .clickable { viewModel.irParaPagina(paginaAtual + 1) }
+                                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 }
 
+// CatalogoCard permanece igual
 @Composable
 private fun CatalogoCard(
     anime: Anime,

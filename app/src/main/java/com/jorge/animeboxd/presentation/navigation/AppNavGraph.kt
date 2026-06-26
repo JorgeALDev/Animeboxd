@@ -22,7 +22,7 @@ sealed class Screen(val route: String) {
 }
 
 @Composable
-fun AppNavGraph(navController: NavHostController) {
+fun AppNavGraph(navController: NavHostController, onLogout: () -> Unit) {
     val context = LocalContext.current
     val db = AnimeDatabase.getInstance(context)
     val repository = AnimeRepository(db.animeDao())
@@ -37,7 +37,8 @@ fun AppNavGraph(navController: NavHostController) {
             HomeScreen(
                 viewModel = viewModel,
                 onNavigateToCatalog = { navController.navigate(Screen.Catalog.route) },
-                onNavigateToMyList = { navController.navigate(Screen.MyList.route) }
+                onNavigateToMyList = { navController.navigate(Screen.MyList.route) },
+                onLogout
             )
         }
 

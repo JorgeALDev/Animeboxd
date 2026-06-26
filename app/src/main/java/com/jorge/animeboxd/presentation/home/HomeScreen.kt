@@ -2,6 +2,7 @@ package com.jorge.animeboxd.presentation.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,7 +25,8 @@ import com.jorge.animeboxd.ui.theme.*
 fun HomeScreen(
     viewModel: MinhaListaViewModel,
     onNavigateToCatalog: () -> Unit,
-    onNavigateToMyList: () -> Unit
+    onNavigateToMyList: () -> Unit,
+    onLogout: () -> Unit
 ) {
     val animes by viewModel.animesSalvos.collectAsState()
     val totalHoras = viewModel.obterTotalHoras()
@@ -36,6 +38,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(OledBlack)
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -43,13 +46,24 @@ fun HomeScreen(
                 .padding(horizontal = 20.dp)
                 .padding(top = 48.dp, bottom = 16.dp)
         ) {
-            Text(
-                text = "seu catálogo pessoal",
-                style = MaterialTheme.typography.titleSmall.copy(
-                    color = TextMuted,
-                    letterSpacing = 1.4.sp
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "seu catálogo pessoal",
+                    style = MaterialTheme.typography.titleSmall.copy(
+                        color = TextMuted,
+                        letterSpacing = 1.4.sp
+                    )
                 )
-            )
+                Text(
+                    text = "Sair",
+                    style = MaterialTheme.typography.labelMedium.copy(color = VioletLight),
+                    modifier = Modifier.clickable { onLogout() }
+                )
+            }
             Spacer(Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
@@ -75,7 +89,7 @@ fun HomeScreen(
 
         Column(
             modifier = Modifier
-                .weight(1f)
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
