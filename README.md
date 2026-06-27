@@ -91,7 +91,7 @@ app/src/main/java/com/jorge/animeboxd/
 
 <img src="https://raw.githubusercontent.com/JorgeALDev/Animeboxd/main/README/screenshots/mylist.png" width="250">
 
-### Como Executar
+## Como Executar
 1 - Clone o repositório
 
 git clone https://github.com/JorgeALDev/Animeboxd.git
@@ -108,6 +108,6 @@ Aguarde a sincronização do Gradle
 
 - Senha: admin
 
-# Desenvolvido por Jorge Araújo
+## Desenvolvido por Jorge Araújo
 
 - GitHub: https://github.com/JorgeALDev
