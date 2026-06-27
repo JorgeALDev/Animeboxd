@@ -6,6 +6,9 @@
   <img src="https://img.shields.io/badge/Room-Database-3DDC84" alt="Room Badge"/>
   <img src="https://img.shields.io/badge/MVVM-Architecture-orange" alt="MVVM Badge"/>
   <img src="https://img.shields.io/badge/Platform-Android-green" alt="Android Badge"/>
+  <img src="https://img.shields.io/badge/Retrofit-API-00A86B?logo=retrofit" alt="Retrofit Badge"/>
+  <img src="https://img.shields.io/badge/Coroutines-Asynchronous-6236FF?logo=kotlin" alt="Coroutines Badge"/>
+  <img src="https://img.shields.io/badge/Gson-JSON-000000?logo=json" alt="Gson Badge"/>
 </p>
 
 ## Sobre o Projeto
@@ -101,9 +104,10 @@ Aguarde a sincronização do Gradle
 
 
 ## Credenciais de Login
-Usuário: admin
-Senha: admin
+- Usuário: admin
 
-Desenvolvido por
-Jorge Araújo
-GitHub: https://github.com/JorgeALDev
+- Senha: admin
+
+# Desenvolvido por Jorge Araújo
+
+- GitHub: https://github.com/JorgeALDev
